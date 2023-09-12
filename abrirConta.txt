@@ -1,0 +1,23 @@
+class Conta:
+    def __init__(self, nome, numero):
+        self.nome = nome
+        self.numero = numero
+        self.corrent = ContaCorrent()
+
+
+class ContaCorrent:
+    valor = 10
+
+
+contas = []
+
+while True:
+    print("Criar conta? ")
+    res = input()
+
+    if res.startswith("s"):
+        conta = Conta(input("Nome: "), input("Numero"))
+        contas.append(conta)
+    
+    for c in contas:
+        print(c.nome, c.numero)

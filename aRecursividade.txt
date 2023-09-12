@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <time.h>
+#define TAMANHO 10
+
+int soma(int array[], int index){
+    if(index < 0){
+        return 0;
+    }
+    return array[index] + soma(array, index - 1);
+}
+
+int main() {
+    int array[TAMANHO], resultado = 0;
+
+    srand(time(NULL));
+
+    printf("Array sorteado:\n");
+    for(int i = 0; i < TAMANHO; i++){
+        array[i] = rand() % 10;
+        printf(" %d|", array[i]);
+    }
+    
+    printf("\n");
+    resultado = soma(array, TAMANHO - 1);
+    printf("O resultado da soma do array eh %d", resultado);
+
+    return 0;
+}
