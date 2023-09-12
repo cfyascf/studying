@@ -1,0 +1,42 @@
+class Jogador:
+    def __init__(self, id: int, nome: str, apelido: str, dataNascimento: int, numero: int, posicao: str, qualidade: str, cartoes: int, suspenso : bool):
+        self.id = id
+        self.nome = nome
+        self.apelido = apelido
+        self.dataNascimento = dataNascimento
+        self.numero = numero
+        self.posicao = posicao
+        self.qualidade = qualidade
+        self.cartoes = cartoes
+        self.suspenso = suspenso
+
+    def condicaoJogo(self):
+        if self.suspenso == True:
+            return False
+        else:
+            return True
+        
+class Plantel:
+    def __init__(self):
+        self.lista = []
+
+    def cadastrarJogador(self, jogador):
+        self.lista.append(jogador)
+
+    def mostraDados(self):
+        for i in range(len(self.lista)):
+            print(f"{self.lista[i].posicao}: {self.lista[i].numero} - {self.lista[i].nome} ({self.lista[i].apelido}) - {self.lista[i].dataNascimento} / CONDICAO: {self.lista[i].suspenso}")
+
+id = int(input("Insira o numero de identificacao(id): "))
+nome = input("Nome: ")
+apelido = input("Apelido: ")
+dataNascimento = int(input("Data de nascimento(dd/mm/aa): "))
+numero = int(input("Numero: "))
+posicao = input("Posicao: ")
+qualidade = input("Qualidade: ")
+cartoes = int(input("Cartoes (equivalentes a amarelos): "))
+suspenso = input("O jogador esta suspenso? (y,n)\n")
+
+plantel = Plantel()
+plantel.cadastrarJogador(Jogador(id, nome, apelido, dataNascimento, numero, posicao, qualidade, cartoes, suspenso))
+plantel.mostraDados()
