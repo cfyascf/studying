@@ -1,0 +1,100 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+
+    box-sizing: border-box;
+
+    font-family: 'Inter', sans-serif;
+}
+
+
+.grey-text{
+    color: grey;
+}
+
+
+body{
+    width: 100vw;
+    min-height: 80vh;
+
+    background-color: #f0f0f0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+main{
+    width: 60%;
+
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, .3);
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+header{
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form{
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+fieldset{
+    width: 90%;
+    height: 35px;
+
+    align-self: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+form > div{
+    margin-top: 15px;
+    align-self: flex-end;
+}
+
+label{
+    font-weight: 600;
+}
+
+input{
+    width: 70%;
+    height: 35px;
+
+    padding: 2px 15px;
+    border: solid 1px rgba(0, 0, 0, .3);
+    border-radius: 8px;
+}
+
+button{
+    font-weight: 500;
+    color: #fff;
+
+    padding: 10px 20px;
+}
+
+.yellow-button{
+    background-color: #f4b147;
+}
+.blue-button{
+    background-color: #007bff;
+}
