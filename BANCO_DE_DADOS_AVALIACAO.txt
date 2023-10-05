@@ -1,0 +1,239 @@
+--- Criar a base de dados e prepará-la para uso.
+
+CREATE DATABASE BibliotecaPublica;
+
+--- Criar as tabelas de acordo com o modelo lógico relacional idealizado na avaliação anterior, 
+considerandoas restrições de integridade; a base de dados deve conter pelo menos cinco
+tabelas, análogas a: livro,autor, membro, categoria, empréstimo.
+
+CREATE TABLE membro(
+	id_membro INT PRIMARY KEY AUTO_INCREMENT,
+	nome_membro VARCHAR(50) NOT NULL,
+  	cpf NUMERIC(11) NOT NULL,
+ 	telefone NUMERIC(11) NOT NULL,
+  	bairro VARCHAR(50),
+  	rua VARCHAR(50),
+  	numero INT );
+    
+CREATE TABLE livro (
+	id_livro INT PRIMARY KEY AUTO_INCREMENT,
+	titulo VARCHAR(50) NOT NULL,
+  	ano_publicacao INT,
+  	numero_exemplares INT,
+  	disponibilidade BOOLEAN NOT NULL,
+  	edicao VARCHAR(50),
+  	nome_autor VARCHAR(50),
+  	genero VARCHAR(50),
+	FOREIGN KEY (nome_autor)
+		REFERENCES autor(nome_autor),
+	FOREIGN KEY (genero)
+		REFERENCES categoria(genero));
+    
+CREATE TABLE emprestimo (
+	protocolo INT PRIMARY KEY AUTO_INCREMENT,
+	id_membro INT,
+	id_livro INT,
+	data_nasc_membro DATE,
+	devolucao_prevista DATETIME NOT NULL,
+	devolucao_real DATETIME NOT NULL,
+	FOREIGN KEY (id_membro)
+		REFERENCES membro(id_membro),
+	FOREIGN KEY (id_livro)
+		REFERENCES livro(id_livro));
+        
+CREATE TABLE autor (
+	nome_autor VARCHAR(50) PRIMARY KEY,
+  	data_nasc_autor DATE,
+  	nacionalidade VARCHAR(50));
+    
+CREATE TABLE categoria (
+	genero VARCHAR(50) PRIMARY KEY,
+	idioma VARCHAR(50),
+	popularidade VARCHAR(50));
+
+--- Inserir pelo menos 5 registros em cada tabela.
+
+INSERT INTO membro
+(nome_membro, cpf, telefone, bairro, rua, numero)
+VALUES
+('Joao Vitor', 14465478966, 41999887766, 'Tatuquara', 'Imperador Senaldo', 63);
+
+INSERT INTO membro
+(nome_membro, cpf, telefone, bairro, rua, numero)
+VALUES
+('Yasmim da Cunha', 09092505960, 41997940875, 'São Braz', 'Terra Roxa', 57);
+
+INSERT INTO membro
+(nome_membro, cpf, telefone, bairro, rua, numero)
+VALUES
+('Maria Eduarda', 11122233344, 41998900463, 'Tatuquara', 'José Krenchiclova', 43);
+
+INSERT INTO membro
+(nome_membro, cpf, telefone, bairro, rua, numero)
+VALUES
+('Jessica Fedalto', 22233344455, 41991072847, 'Rondinha', 'Estrada da sereia', 1286);
+
+INSERT INTO membro
+(nome_membro, cpf, telefone, bairro, rua, numero)
+VALUES
+('Maria Eduarda Selhorst', 44455566677, 41992819134, 'Rio pequeno', 'Rua dos cedros', 25);
+
+INSERT INTO membro
+(nome_membro, cpf, telefone, bairro, rua, numero)
+VALUES
+('Yasmin Trembulack', 55566677788, 41992885789, 'Boneca do iguaçu', 'Rua Acre', 250);
+
+
+INSERT INTO autor
+(nome_autor, data_nasc_autor, nacionalidade)
+VALUES
+('Alex Michaelides', 1977, 'britânico');
+
+INSERT INTO autor
+(nome_autor, data_nasc_autor, nacionalidade)
+VALUES
+('JK Rolling', 1965, 'britânico');
+
+INSERT INTO autor
+(nome_autor, data_nasc_autor, nacionalidade)
+VALUES
+('Suzzane Collins', 1962, 'americano');
+
+INSERT INTO autor
+(nome_autor, data_nasc_autor, nacionalidade)
+VALUES
+('Veronica Roth', 1988, 'americano');
+
+INSERT INTO autor
+(nome_autor, data_nasc_autor, nacionalidade)
+VALUES
+('AJ Finn', 1979, 'americano');
+
+
+INSERT INTO livro
+(titulo, nome_autor, ano_publicacao, edicao, genero, numero_exemplares, disponibilidade)
+VALUES
+('A Paciente Silenciosa', 'Alex Michaelides', 2019, 'português', 'suspense', 10, True);
+
+INSERT INTO livro
+(titulo, nome_autor, ano_publicacao, edicao, genero, numero_exemplares, disponibilidade)
+VALUES
+('Jogos Vorazes', 'Suzzane Collins', 2008, 'editorial presença', 'romance', 12, True);
+
+INSERT INTO livro
+(titulo, nome_autor, ano_publicacao, edicao, genero, numero_exemplares, disponibilidade)
+VALUES
+('Harry Potter e a Pedra Filosofal', 'JK Rolling', 1997, 'rocco', 'fantasia', 6, True);
+
+INSERT INTO livro
+(titulo, nome_autor, ano_publicacao, edicao, genero, numero_exemplares, disponibilidade)
+VALUES
+('Divergente', 'Veronica Roth', 2011, 'jovens leitores', 'ficção científica', 4, True);
+
+INSERT INTO livro
+(titulo, nome_autor, ano_publicacao, edicao, genero, numero_exemplares, disponibilidade)
+VALUES
+('A Mulher na Janela', 'AJ Finn', 2018, 'editora arqueiro', 'terror', 3, True);
+
+
+INSERT INTO emprestimo
+(id_membro, id_livro, devolucao_prevista, devolucao_real, data_nasc_membro)
+VALUES
+(1, 12, '2023-10-05', '0000-00-00', '2005-05-10');
+
+INSERT INTO emprestimo
+(id_membro, id_livro, devolucao_prevista, devolucao_real, data_nasc_membro)
+VALUES
+(3, 10, '2023-10-12', '0000-00-00', '2003-23-03');
+
+INSERT INTO emprestimo
+(id_membro, id_livro, devolucao_prevista, devolucao_real, data_nasc_membro)
+VALUES
+(6, 5, '2023-10-25', '0000-00-00', '2006-13-11');
+
+INSERT INTO emprestimo
+(id_membro, id_livro, devolucao_prevista, devolucao_real, data_nasc_membro)
+VALUES
+(4, 13, '2023-10-11', '0000-00-00', '2004-22-04');
+
+INSERT INTO emprestimo
+(id_membro, id_livro, devolucao_prevista, devolucao_real, data_nasc_membro)
+VALUES
+(2, 5, '2023-10-19', '0000-00-00', '2002-10-04');
+
+
+INSERT INTO categoria
+(genero, idioma, popularidade)
+VALUES
+('fantasia', 'português', 'muito popular');
+
+INSERT INTO categoria
+(genero, idioma, popularidade)
+VALUES
+('suspense', 'português', 'popular');
+
+INSERT INTO categoria
+(genero, idioma, popularidade)
+VALUES
+('ficção científica', 'português', 'popular');
+
+INSERT INTO categoria
+(genero, idioma, popularidade)
+VALUES
+('romance', 'português', 'muito popular');
+
+INSERT INTO categoria
+(genero, idioma, popularidade)
+VALUES
+('terror', 'português', 'procurado');
+
+--- Listar todos os autores cujo nome inicia com a letra ‘A’:
+
+SELECT * 
+FROM autor 
+WHERE nome_autor LIKE "A%"
+
+--- Listar todos os livros cujo título contenha a palavra ‘sistema’:
+
+SELECT * 
+FROM livro
+WHERE titulo LIKE "%sistema%"
+
+--- Listar a chave primária e o título dos livros que foram publicados há mais de 5 anos:
+  
+SELECT id_livro, titulo 
+FROM livro 
+WHERE 2023 - ano_publicacao > 5;
+
+--- Listar, em ordem alfabética por título, os livros que possuem menos de 5 exemplares disponíveis:
+
+SELECT titulo 
+FROM livro
+WHERE numero_exemplares < 5
+ORDER BY titulo ASC;
+
+--- Listar todos os livros que nunca foram emprestados:
+
+SELECT * 
+FROM livro
+WHERE livro.id_livro NOT IN (SELECT id_livro FROM emprestimo);
+
+--- Mudar a data de devolução real de todos os empréstimos para a data atual:
+
+UPDATE emprestimo
+SET devolucao_real = '2023-04-10'
+
+--- Postergar em um mês a data de devolução prevista de todos os empréstimos.
+
+UPDATE emprestimo 
+SET devolucao_prevista = DATE_ADD(devolucao_prevista, INTERVAL 1 MONTH);
+
+--- Excluir todos os membros que nunca fizeram empréstimo
+
+DELETE FROM membro 
+WHERE membro.id_membro NOT IN (SELECT id_membro FROM emprestimo);
+
+--- Excluir todas as categorias que não aparecem em nenhum livro.
+
+DELETE FROM categoria
+WHERE categoria.genero NOT IN (SELECT genero FROM livro);
