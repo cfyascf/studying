@@ -1,0 +1,12 @@
+main{
+    width: 100%;
+    height: 78.5vh;
+
+    background-color: #E8FFCE;
+    padding: 50px 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 70px;
+}

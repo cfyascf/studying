@@ -1,0 +1,16 @@
+header{
+    width: 100%;
+    height: 10vh;
+
+    background-color: #ACFADF;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header>h1{
+    font-size: 2.1rem;
+    font-weight: 600;
+    letter-spacing: 10px;
+}
