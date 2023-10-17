@@ -1,0 +1,59 @@
+Ano do carro: 2005
+Ano do carro: 2004
+
+ / Veiculo 1 / 
+Modelo: uno
+Fabricante: fiat
+Cor: branca
+Ano: 2001
+Valor: 17500.000000
+
+ / Veiculo 2 / 
+Modelo: mobi
+Fabricante: fiat
+Cor: vermelha
+Ano: 2015
+Valor: 32000.000000
+
+ / Veiculo 1 / 
+Modelo: celta
+Fabricante: chevrolet
+Cor: prata
+Ano: 2005
+Valor: 20000.000000
+
+ / Veiculo 2 / 
+Modelo: corsa
+Fabricante: chevrolet
+Cor: preta
+Ano: 2010
+Valor: 25000.000000
+
+ / Veiculo 3 / 
+Modelo: belina
+Fabricante: ford
+Cor: azul
+Ano: 1990
+Valor: 10000.000000
+
+ / Veiculo 1 / 
+Modelo: tesla
+Fabricante: elon
+Cor: rosa
+Ano: 2066
+Valor: 8765444.000000
+
+ / Veiculo 2 / 
+Modelo: joao
+Fabricante: mae
+Cor: feio
+Ano: 2004
+Valor: 0.000000
+
+
+ / Veiculo 1 / 
+Modelo: joao
+Fabricante: mae
+Cor: feio
+Ano: 2006
+Valor: 0.000000
