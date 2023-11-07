@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+
+// Training data
+float train[25][2] = {
+    {10, 35},
+    {5, 40},
+    {15, 30},
+    {20, 25},
+    {8, 37},
+    {12, 33},
+    {18, 27},
+    {22, 23},
+    {9, 36},
+    {14, 31},
+    {7, 38},
+    {13, 32},
+    {16, 29},
+    {11, 34},
+    {6, 39},
+    {17, 28},
+    {21, 24},
+    {19, 26},
+    {4, 41},
+    {3, 42},
+    {2, 43},
+    {1, 44},
+    {26, 19},
+    {23, 22},
+    {24, 21}
+};
+
+#define TRAIN_COUNT (sizeof(train) / sizeof(train[0]))
+
+float sigmoid(float x) {
+    return 1.0 / (1.0 + exp(-x));
+}
+
+float rand_float(){
+    return (float)rand() / (float)RAND_MAX;
+}
+
+float cost(float w1, float w2, float b) {
+    float total_cost = 0.0;
+
+    for (int i = 0; i < TRAIN_COUNT; i++) {
+        float x = train[i][0];
+        float z = train[i][1];
+        float y = (w1 * x) + (w2 * z) + b;
+
+        float expected_y = 45.0; // Your target value
+
+        total_cost += (y - expected_y) * (y - expected_y);
+    }
+
+    return total_cost / TRAIN_COUNT;
+}
+
+int main() {
+    srand(time(NULL));
+
+    float w1 = rand_float();
+    float w2 = rand_float();
+    float b = rand_float();
+    float eps = 1e-3;
+    float rate = 1e-3;
+
+    printf("Initial cost: %f\n", cost(w1, w2, b));
+
+    for (int i = 0; i < 500; i++) {
+        float dw1 = 0.0;
+        float dw2 = 0.0;
+        float db = 0.0;
+
+        for (int j = 0; j < TRAIN_COUNT; j++) {
+            float x = train[j][0];
+            float z = train[j][1];
+            float y = (w1 * x) + (w2 * z) + b;
+            float expected_y = 45.0;
+            float d = y - expected_y;
+
+            dw1 += d * x;
+            dw2 += d * z;
+            db += d;
+        }
+
+        dw1 /= TRAIN_COUNT;
+        dw2 /= TRAIN_COUNT;
+        db /= TRAIN_COUNT;
+
+        w1 -= rate * dw1;
+        w2 -= rate * dw2;
+        b -= rate * db;
+
+        printf("Cost: %f, w1: %f, w2: %f, b: %f\n", cost(w1, w2, b), w1, w2, b);
+    }
+
+    printf("Final w1: %f, w2: %f, b: %f\n", w1, w2, b);
+
+    return 0;
+}
