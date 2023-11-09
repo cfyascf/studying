@@ -1,0 +1,156 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <string.h>
+
+// Training data
+float *data = NULL;
+float *label = NULL;
+#define DATA_SIZE 10 // Adjust this size according to your actual data size
+
+void read_data(FILE *file, char *data, char *label) {
+  char c;
+  int size = 0, aux = 0;
+  char line[100];
+  char *token;
+
+  // fills array labels with the first number of each line
+  while (fgets(line, sizeof(line), file)) {
+    int size = strlen(line);
+
+    if (size > 0 && line[size - 1] == '\n') {
+        line[size - 1] = '\0';
+    }
+
+    token = strtok(line, " ");
+
+    label = (char **)realloc(label, (aux + 1) * sizeof(char *));
+    label[aux] = strdup(token);
+    aux++;
+  }  
+
+  // fills array data with the rest of the numbers
+  while (fgets(line, sizeof(line), file)) {
+    int size = strlen(line);
+
+    if (size > 0 && line[size - 1] == '\n') {
+        line[0] = '\0';
+    }
+
+    token = strtok(line, " ");
+
+    label = (char **)realloc(label, (aux + 1) * sizeof(char *));
+    label[aux] = strdup(token);
+    aux++;
+  }  
+
+}
+
+void read_data(FILE *file, char *data, char *labels) {
+  char c;
+  int size = 0, aux = 0;
+  char line[100];
+  char *token;
+
+  // fill array labels
+  while (fgets(line, sizeof(line), file)) {
+    int size = strlen(line);
+
+    if (size > 0 && line[size - 1] == '\n') {
+        line[size - 1] = '\0';
+    }
+
+    token = strtok(line, " ");
+
+    labels = (char *)realloc(labels, (aux + 1) * sizeof(char *));
+    labels[aux] = strdup(token);
+    aux++;
+  }  
+
+  while ((c = fgetc(file)) != EOF) {
+    data = (char *)realloc(data, (size + 1) * sizeof(char));
+    data[size] = c;
+    size++;
+  }
+
+  data[size] = '\0';
+}
+
+// Activation function
+float sigmoid(float x) {
+  return 1.0 / (1.0 + exp(-x));
+}
+
+// Randomize float
+float rand_float() {
+  return (float)rand() / (float)RAND_MAX;
+}
+
+// Cost function
+float cost(float *x, float *w, float b) {
+  float total_cost = 0.0;
+  float y = 0.0;
+
+  for (int i = 0; i < DATA_SIZE; i++) {
+    x[i] = data[i];
+    y += w[i] * x[i];
+  } // calculates the equation with each input and weight
+
+  y = y + b; // integrates the bias
+
+  float expected_y = 45.0;
+
+  total_cost += (y - expected_y) * (y - expected_y);
+
+  return total_cost / DATA_SIZE;
+}
+
+void backpropagation(float *x) {
+  float w[DATA_SIZE];
+  float b = rand_float();
+  float eps = 1e-3;
+  float rate = 1e-3;
+
+  // Gives random values to the weights
+  for (int i = 0; i < DATA_SIZE; i++) {
+    w[i] = rand_float();
+  }
+
+  printf("Initial cost: %f\n", cost(x, w, b));
+
+  for (int i = 0; i < 500; i++) {
+    float dw[DATA_SIZE];
+    float db = 0.0;
+
+    // estimates delta
+    for (int j = 0; j < DATA_SIZE; j++) {
+      float cost_base = cost(x, w, b);
+
+      dw[j] = 2 * (cost(x, w, b + eps) - cost_base) / eps * x[j];
+      db += 2 * (cost(x, w, b + eps) - cost_base) / eps;
+    }
+
+    // subtracts delta from weight
+    for (int j = 0; j < DATA_SIZE; j++) {
+      w[j] -= rate * dw[j] / DATA_SIZE;
+    }
+    b -= rate * db / DATA_SIZE;
+  }
+
+  for (int i = 0; i < DATA_SIZE; i++) {
+    printf("%f\n", cost(x, w, b));
+  }
+}
+
+int main() {
+  srand(time(NULL));
+
+  float x[DATA_SIZE];
+  for (int i = 0; i < DATA_SIZE; i++) {
+    x[i] = data[i];
+  }
+
+  backpropagation(x);
+  return 0;
+}
