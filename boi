@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void readData(FILE * file, char ***label, char ***data){
+
+    char line[100];
+    char *token[100];
+    int size = 0;
+
+    while(fgets(line, sizeof(line), file)){
+
+        *token = strtok(line, ",");
+        *label = (char **) realloc(*label, (size + 1) * sizeof(char *));
+        (*label)[size] = token;
+        size++;
+
+    }
+
+    size = 0;
+
+    while(fgets(line, sizeof(line), file)){
+
+        line[0] = '\0';
+        *data = (char **) realloc(*label, (size + 1) * sizeof(char *));
+        (*data)[size] = line;
+
+    }
+
+}
+
+int main(){
+
+    FILE * file;
+    file = fopen("arq.txt", "r");
+
+    char **label = NULL;
+    char **data = NULL;
+
+    readData(file, *label, *data);
+
+    return 0;
+}
