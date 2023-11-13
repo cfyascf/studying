@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define INPUT_SIZE 784
+#define TRAIN_COUNT 100
+
+int num_neurons_layer_in = 72;
+int num_neurons_layer_hidden = 16;
+int num_neurons_layer_out = 9;
+
+typedef struct Neuron_t{
+    float weight;
+    float bias;
+    float output;
+    float input[INPUT_SIZE];
+} Neuron;
+
+float reLU(double x) {
+    return (x > 0) ? x : 0;
+}
+
+float rand_float() {
+  return (float)rand() / (float)RAND_MAX;
+}
+
+void initializeLayer(Neuron *layer, int num_neurons){
+    for(int i = 0; i < num_neurons; i++){
+        layer[i].weight = rand_float();
+        layer[i].bias = rand_float();
+    }
+}
+
+void setInput(Neuron *layer, int num_neurons, int data[][INPUT_SIZE], int image){
+    for(int i = 0; i < num_neurons; i++){
+        for(int j = 0; j < INPUT_SIZE; j++){
+            layer[i].input[j] = data[image][j];
+        }
+    }
+}
+
+void forwardPass(Neuron *layer, int num_neurons){
+    for(int i = 0; i < num_neurons; i++){
+        double weightedSum = layer[i].bias;
+
+        for(int j = 0; j < INPUT_SIZE; j++){
+            weightedSum += layer[i].input[j] * layer[i].weight;
+        }
+        layer[i].output = weightedSum;
+    }
+}
+
+float costFunction(Neuron *layer, int num_neurons, int data[][INPUT_SIZE], int image) {
+    double expected_output = data[image][0];
+    double final_cost = 0.0;
+
+    for(int i = 0; i < num_neurons; i++){
+        double final_cost += expected_output - layer[i].output;
+    }
+
+    final_cost /= INPUT_SIZE;
+
+  return reLU(final_cost * final_cost);
+}
+
+// void backpropagation(Neuron *layer, int image, int data[][INPUT_SIZE]){
+//     double rate = 1e-6;
+//     double eps = 1e-6;
+
+//     for(int i = 0; i < TRAIN_COUNT; i++){
+//         for(int j = 0; j < num_neurons; j++){
+//             double cost_base = costFunction(layer, image, data);
+//         }
+//     }
+// }
+
+int main(void){
+
+    int data[][] = NULL;
+    int image = 0;
+
+    Neuron *layer_1 = malloc(num_neurons_layer_in * sizeof(Neuron));
+    Neuron *layer_2 = malloc(num_neurons_layer_hidden * sizeof(Neuron));
+    Neuron *layer_3 = malloc(num_neurons_layer_hidden * sizeof(Neuron));
+    Neuron *layer_4 = malloc(num_neurons_layer_out * sizeof(Neuron));
+
+    // initializeLayer(layer_1, num_neurons_layer_in);
+    // initializeLayer(layer_2, num_neurons_layer_hidden);
+    // initializeLayer(layer_3, num_neurons_layer_hidden);
+    // initializeLayer(layer_4, num_neurons_layer_out);
+
+    // setImage(layer_1, num_neurons_layer_in, data, image);
+
+
+    return 0;
+}
