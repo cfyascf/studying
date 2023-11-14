@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <readata.h>
+#include "readata.h"
 
-#define INPUT_SIZE 784
+#define INPUT_SIZE 783
 #define TRAIN_COUNT_DELTA 100
 #define TRAIN_COUNT_BPP 100
 
@@ -13,17 +13,17 @@ typedef struct Neuron_t{
     float error;
     float bias;
     float output;
-    float input[INPUT_SIZE];
+    int input[INPUT_SIZE];
 } Neuron;
 
 int neurons_in = 72;
 int neurons_hn = 16;
 int neurons_out = 9;
 
-Neuron *layer_1 = malloc(neurons_in * sizeof(Neuron));
-Neuron *layer_2 = malloc(neurons_hn * sizeof(Neuron));
-Neuron *layer_3 = malloc(neurons_hn * sizeof(Neuron));
-Neuron *layer_4 = malloc(neurons_out * sizeof(Neuron));
+Neuron *layer_1;
+Neuron *layer_2;
+Neuron *layer_3;
+Neuron *layer_4;
 
 float reLU(double x) {
     return (x > 0) ? x : 0;
@@ -41,7 +41,7 @@ void initializeLayer(Neuron *layer, int num_neurons){
     }
 }
 
-void setInputInLayer(Neuron *layer, int num_neurons, int image, int data[][INPUT_SIZE]){
+void setInputInLayer(Neuron *layer, int num_neurons, int image, int (*data)[INPUT_SIZE]){
     for(int i = 0; i < num_neurons; i++){
         for(int j = 1; j < INPUT_SIZE; j++){
             layer[i].input[j] = data[image][j];
@@ -68,12 +68,12 @@ void feedForward(Neuron *layer, int num_neurons){
     }
 }
 
-float costLayer(Neuron *layer, int num_neurons, int image, int data[][INPUT_SIZE]) {
+float costLayer(Neuron *layer, int num_neurons, int image, int (*data)[INPUT_SIZE]) {
     double expected_output = data[image][0];
     double final_cost = 0.0;
 
     for(int i = 0; i < num_neurons; i++){
-        double final_cost += expected_output - layer[i].output;
+        final_cost += expected_output - layer[i].output;
     }
 
     final_cost /= num_neurons;
@@ -81,19 +81,19 @@ float costLayer(Neuron *layer, int num_neurons, int image, int data[][INPUT_SIZE
   return final_cost * final_cost;
 }
 
-float costOverall(int image, int data){
-    double cost1 = costFunctionLayer(layer_1, neurons_in, image, data);
-    double cost2 = costFunctionLayer(layer_2, neurons_hn, image, data);
-    double cost3 = costFunctionLayer(layer_3, neurons_hn, image, data);
-    double cost4 = costFunctionLayer(layer_4, neurons_out, image, data);
+float costOverall(int image, int (*data)[INPUT_SIZE]){
+    double cost1 = costLayer(layer_1, neurons_in, image, data);
+    double cost2 = costLayer(layer_2, neurons_hn, image, data);
+    double cost3 = costLayer(layer_3, neurons_hn, image, data);
+    double cost4 = costLayer(layer_4, neurons_out, image, data);
 
     return (cost1 + cost2 + cost3 + cost4) / 4;
 }
 
-void backpropagation(int image, int data[][INPUT_SIZE]){
+void backpropagation(int image, int (*data)[INPUT_SIZE]){
     double rate = 1e-6;
     double eps = 1e-6;
-    float expected_output = data[image][0];
+    int expected_output = data[image][0];
 
     for(int i = 0; i < TRAIN_COUNT_DELTA; i++){
 
@@ -141,7 +141,7 @@ int main(void){
 
     // gettin data
     FILE * file;
-    file = fopen("mnist_train.csv", "r");
+    file = fopen("mnist_train.csv", "r+");
     if(file == NULL){
         printf("Error opening file\\\n");
         return 1;
@@ -153,6 +153,11 @@ int main(void){
     read_data(file, &data, &num_lines);
     fclose(file);
 
+    layer_1 = malloc(neurons_in * sizeof(Neuron));
+    layer_2 = malloc(neurons_hn * sizeof(Neuron));
+    layer_3 = malloc(neurons_hn * sizeof(Neuron));
+    layer_4 = malloc(neurons_out * sizeof(Neuron));
+
     // ai
     initializeLayer(layer_1, neurons_in);
     initializeLayer(layer_2, neurons_hn);
@@ -161,7 +166,7 @@ int main(void){
 
     for(int image = 0; image < 1; image++){
 
-        setInputInLayer(layer_1, neurons_in, data, image);
+        setInputInLayer(layer_1, neurons_in, image, data);
         setInputHnLayer(layer_2, layer_1, neurons_hn, neurons_in);
         setInputHnLayer(layer_3, layer_2, neurons_hn, neurons_hn);
         setInputHnLayer(layer_4, layer_3, neurons_hn, neurons_out);
@@ -174,7 +179,7 @@ int main(void){
 
             backpropagation(image, data);
 
-            printf("Cost: %lld\n", costOverall(image, data));
+            printf("Cost: %f\n", costOverall(image, data));
         }
 
         for(int i = 0; i < neurons_hn; i++){
