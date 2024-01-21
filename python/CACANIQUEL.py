@@ -6,6 +6,7 @@ import time
 def user():
     global saldo
     global easter
+    global chance
     janela.update()
     entry_tratado = entry_aposta.get()
     
@@ -14,7 +15,7 @@ def user():
     except ValueError:
         easter +=1
         if easter >= 3:
-            messagebox.showinfo("Aviso", "O meu criador eh lindao!")
+            messagebox.showinfo("Aviso", "Minha criadora eh linda e seu ajudante eh mais ou menos kkkkk!")
         messagebox.showerror("Aviso","Tente digitar um valor valido." )
         return
     
@@ -30,7 +31,14 @@ def user():
     saldo_label.config(text=f"SALDO ATUAL >> {saldo}")
     sorteio_label.config(text="Sorteados:")
     sorteio_str = ""
-    for i in range(5):
+
+    for i in range(0, chance):
+        sorteio_str += 'X' + '  '
+        sorteio_label.config(text=sorteio_str)
+        janela.update()
+        time.sleep(1)
+
+    for i in range(chance, 5):
         sorteio_str += random.choice(badges) + '  '
         sorteio_label.config(text=sorteio_str)
         janela.update()
@@ -40,7 +48,7 @@ def user():
 
     if result:
         val_ganho = salApostado * mult
-        profit = salApostado - val_ganho
+        profit = val_ganho - salApostado
         saldo += val_ganho
         saldo_label.config(text=f"SALDO ATUAL >> {saldo}")
         messagebox.showinfo("Resultado", f"Você ganhou! Lucro: {profit}")
@@ -84,6 +92,19 @@ def dev_window():
     entry_att.grid(row=1, column=1, padx=10, pady=10)
     button_att = tk.Button(janela_dev, text="Enter", command=lambda: att_saldo(entry_att))
     button_att.grid(row=1, column=2, padx=10, pady=10)
+    
+    handle_label = tk.Label(janela_dev, text="Qual o valor de Handle\n 1-Igual / 2-Leve/ 3-Moderado / 4-Mega / 5-Blaster ")
+    handle_label.grid(row=2, column=0, padx=10, pady=10)
+    handle_entry = tk.Entry(janela_dev)
+    handle_entry.grid(row=2, column=1, padx=10, pady=10) 
+    button_handle = tk.Button(janela_dev, text="Handle", command=lambda: handle(handle_entry, janela_dev))
+    button_handle.grid(row=2, column=2, padx=10, pady=10)
+
+def handle(handle_entry, janela_dev):
+    global chance
+    chance = int((handle_entry.get()))
+    messagebox.showinfo("AVISO", "CHEAT ACTIVATED!")
+    janela_dev.destroy()
 
 def att_saldo(entry_att):
     global saldo
@@ -101,18 +122,18 @@ def dev_login():
 
     user_label = tk.Label(janela_login, text="Usuario:")
     user_label.grid(row=1, column=0, padx=10, pady=10)
-    user_entry = tk.Entry(janela_login)
+    user_entry = tk.Entry(janela_login, show="*")
     user_entry.grid(row=1, column=1, padx=10, pady=10)
 
     senha_label = tk.Label(janela_login, text="Senha:")
     senha_label.grid(row=2, column=0, padx=10, pady=10)
-    senha_entry = tk.Entry(janela_login)
+    senha_entry = tk.Entry(janela_login, show="*")
     senha_entry.grid(row=2, column=1, padx=10, pady=10)
 
-    user_button = tk.Button(janela_login, text="Enter", command=verify(user_entry, senha_entry))
+    user_button = tk.Button(janela_login, text="Enter", command=lambda: verify(user_entry, senha_entry, janela_login))
     user_button.grid(row=3, column=1, padx=10, pady=10)
 
-def verify(user_entry, senha_entry):
+def verify(user_entry, senha_entry, janela_login):
     usuario = "yasgo"
     senha = "yasgo"
 
@@ -120,10 +141,14 @@ def verify(user_entry, senha_entry):
     senha_input = senha_entry.get()
 
     if(user_input == usuario and senha_input == senha):
+        janela_login.destroy()
         dev_window()
+        
     else:
-        # messagebox.showwarning("SAIA DAQUI, INTRUSO!!!")
-        return
+       messagebox.showwarning("Acesso Negado", "Usuário ou senha incorretos. Tente novamente.")
+       time.sleep(0.5) 
+       janela_login.destroy()
+    return
 
 
 # JANELA PRINCIPAL
@@ -134,6 +159,7 @@ janela.title('CASSINO')
 saldo = 1000
 badges = ['S', 'B', 'C', 'A', 'X']
 easter = 0
+chance = 0
 
 # WIDGETS
 saldo_label = tk.Label(janela, text=f'SALDO ATUAL >> {saldo}')
