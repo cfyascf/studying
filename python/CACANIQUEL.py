@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 import time
+import math
 
 def user():
     global saldo
@@ -12,6 +13,10 @@ def user():
     
     try:
         salApostado = float(entry_tratado)
+
+        if math.isnan(salApostado):
+                messagebox.showerror("Aviso","Tente digitar um valor valido." )
+            
     except ValueError:
         easter +=1
         if easter >= 3:
